@@ -31,3 +31,5 @@ if arquivo_upload is not None:
     variavel.bar_chart(df_surjo)
 
     v1, v2, v3 = st.tab(['nome1','nome2','nome3'])
+
+
