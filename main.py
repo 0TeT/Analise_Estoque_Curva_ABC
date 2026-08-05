@@ -1,6 +1,8 @@
 import pandas as pd
 import streamlit as st
 
+from Ferramentas.Tratamento import padronizando
+
 # Configurando o titulo da pagina
 st.set_page_config(page_title='Finanças',page_icon='computer') 
 
@@ -11,25 +13,36 @@ st.markdown("""
            
 """)
 
-# Capturando o arquivo
-arquivo_upload = st.file_uploader(label="Faça Upload dos dados", type=['csv'])
 
-if arquivo_upload is not None:
+def exibir():
+    ''' Função para apresentação de dados '''
+    try:
+        # Exibindo informações
+        st.subheader('Informações do Data Frame')
 
-    # Leitura com Pandas
-    df_surjo = pd.read_csv(arquivo_upload)
+        #Capturando o arquivo
+        arquivo_upload = st.file_uploader('Arquivos', type=['csv'])
 
-    # Formatando pelo proprio streamlit, apenas visualmente
-    format_colunas = {"preco_venda":st.column_config.NumberColumn("preco_venda", format="R$ %f")}
+        if arquivo_upload is not None:
+            
+            df = padronizando(arquivo_upload)
+            st.success('Arquivo enviado com sucesso')
+            st.subheader(arquivo_upload.name)
+            st.dataframe(df)
 
-    # Exibindo os dados
-    st.dataframe(df_surjo, hide_index=True, column_config=format_colunas)
+        else:
+            st.info('Aguardando o arquivo csv')
 
-    variavel = st.expander()# para esconder a informação
-    variavel.dataframe(df_surjo)
-    variavel.line_chart(df_surjo)
-    variavel.bar_chart(df_surjo)
+    except Exception as e:
+        st.error(f'Erro em exibir: {e}')
 
-    v1, v2, v3 = st.tab(['nome1','nome2','nome3'])
+def main():
+    ''' Função principal do programa '''
 
+    # Configuração Geral
+    st.set_page_config(page_title='Curva ABC', layout='wide', initial_sidebar_state='collapsed')
 
+    exibir()
+
+if __name__ == '__main__':
+    main()
