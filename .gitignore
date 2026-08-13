@@ -1,1 +1,9 @@
+# Ambientes Virtuais
+venv/
 .venv/
+env/
+
+# Cache do Python
+*/__pycache__
+*.pyc
+*.pyog
