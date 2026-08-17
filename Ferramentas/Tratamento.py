@@ -108,4 +108,28 @@ def regra_negocio(base):
         1,
         0
     )
+
+   
     return base
+
+def Filtrando_curva(base, tipo_curvas):
+    ''' Filtrando Curvas'''
+
+    try:
+        
+        base = base[['codigo_produto','categoria','custo_unitario','preco_venda','unidades_vendidas_90d','estoque_atual','faturamento_total','curva','vendas_diaria','cobertura_estoque']]
+        if tipo_curvas == 'Curva_A':
+            base = base.query('curva == "A"')
+            
+            return base
+
+        elif tipo_curvas == 'Curva_B':
+            base = base.query('curva == "B"')
+            return base
+        elif tipo_curvas == 'Curva_C':
+            base = base.query('curva == "C"')
+            return base
+        else:
+            raise Exception
+    except Exception as e:
+        return f'Erro na filtragem: {e}'
