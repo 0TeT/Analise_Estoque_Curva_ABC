@@ -106,8 +106,24 @@ def regra_negocio(base):
     base['Flag_Ruptura_Critica'] = np.where(
         (base['curva'] == 'A') & ((base['cobertura_estoque'] < 7)),
         1,
-        0
+        np.where(
+            (base['curva'] == 'B') & ((base['cobertura_estoque'] < 5)),
+            1,
+            np.where(
+                (base['curva'] == 'C') & ((base['cobertura_estoque'] < 3)),
+                1,0
+            )
+        )
+        
     )
+    #base['Flag_Ruptura_Critica'] = np.where(
+    #        (base['curva'] == 'B') & ((base['cobertura_estoque'] < 5)),
+    #        1
+    #    )
+    #base['Flag_Ruptura_Critica'] = np.where(
+    #    (base['curva'] == 'C') & ((base['cobertura_estoque'] < 3)),
+    #    1
+    #)
 
    
     return base
@@ -117,7 +133,7 @@ def Filtrando_curva(base, tipo_curvas):
 
     try:
         
-        base = base[['codigo_produto','categoria','custo_unitario','preco_venda','unidades_vendidas_90d','estoque_atual','faturamento_total','curva','vendas_diaria','cobertura_estoque']]
+        base = base[['codigo_produto','categoria','custo_unitario','preco_venda','unidades_vendidas_90d','estoque_atual','faturamento_total','curva','vendas_diaria','cobertura_estoque','Flag_Ruptura_Critica']]
         if tipo_curvas == 'Curva_A':
             base = base.query('curva == "A"')
             

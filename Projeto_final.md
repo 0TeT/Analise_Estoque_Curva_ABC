@@ -46,7 +46,7 @@
 
 ---
 
-## 📌 Etapa 3: Visualização de Dados (Matplotlib / Seaborn)
+## 📌 Etapa 3: Visualização de Dados (Matplotlib)
 
 - [ ] **1. Gráfico de Pareto (Curva ABC)**
   - Criar um gráfico combinado: barras representando o faturamento individual por produto e uma linha no eixo secundário mostrando o acumulado percentual.
