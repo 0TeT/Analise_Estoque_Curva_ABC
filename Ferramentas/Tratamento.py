@@ -102,7 +102,7 @@ def regra_negocio(base):
     base['vendas_diaria'] = (base['unidades_vendidas_90d'] / 90)
     base['cobertura_estoque'] = (base['estoque_atual'] / base['vendas_diaria']).replace([np.inf, -np.inf],0).fillna(0).astype(int)
 
-    # Flagando Ruptura
+    # Flagando Ruptura por tipo de Curva
     base['Flag_Ruptura_Critica'] = np.where(
         (base['curva'] == 'A') & ((base['cobertura_estoque'] < 7)),
         1,
@@ -116,14 +116,6 @@ def regra_negocio(base):
         )
         
     )
-    #base['Flag_Ruptura_Critica'] = np.where(
-    #        (base['curva'] == 'B') & ((base['cobertura_estoque'] < 5)),
-    #        1
-    #    )
-    #base['Flag_Ruptura_Critica'] = np.where(
-    #    (base['curva'] == 'C') & ((base['cobertura_estoque'] < 3)),
-    #    1
-    #)
 
    
     return base

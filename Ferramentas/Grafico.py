@@ -36,7 +36,6 @@ def pareto(base):
         title_text="% Acumulado", secondary_y=True
     )
 
-    fig.show()
     return fig
 
 def analise_categoria(base):
@@ -52,5 +51,4 @@ def analise_categoria(base):
         "variable":"Métrica"
     }
     )
-    fig.show()
     return fig

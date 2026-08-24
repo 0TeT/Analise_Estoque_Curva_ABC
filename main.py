@@ -3,11 +3,13 @@ import pandas as pd
 import streamlit as st
 
 from Ferramentas.Tratamento import padronizando, Filtrando_curva
-
-# Configurando o titulo da pagina
-st.set_page_config(page_title='Finanças',page_icon='computer') 
+from Ferramentas.Grafico import pareto, analise_categoria
 
 # Formatando com Markdown
+
+
+st.set_page_config(page_title='Curva ABC', layout='wide', initial_sidebar_state='collapsed',page_icon='📦')
+# Configuração Geral
 
 st.markdown("""
 # Curva ABC            
@@ -18,25 +20,25 @@ st.markdown("""
 def kpis_filtrados(base):
     ''' Função para atualizar os filtros'''
     try:
-        filtrando_df = base.copy()
+        filtrado_df = base.copy()
         # --- Cards ---
         card_faturamento, card_estoque, card_ruptura = st.columns(3)
 
-        faturamento_total = filtrando_df['faturamento_total'].sum()
+        faturamento_total = filtrado_df['faturamento_total'].sum()
         exibir_faturamento = f'R$ {faturamento_total:,.2f}'
         card_faturamento.metric('Faturamento Total', exibir_faturamento, border=True)
 
-        estoque_total = filtrando_df['estoque_atual'].sum()
+        estoque_total = filtrado_df['estoque_atual'].sum()
         exibir_estoque = f'{estoque_total:,.0f}'
         card_estoque.metric('Estoque Atual Total', exibir_estoque, border=True)
 
-        ruptura_flags = filtrando_df.query('Flag_Ruptura_Critica == 1 ')['Flag_Ruptura_Critica'].count()
+        ruptura_flags = filtrado_df.query('Flag_Ruptura_Critica == 1 ')['Flag_Ruptura_Critica'].count()
         card_ruptura.metric('Ruptura Crítica de Produtos', ruptura_flags, border=True)
     except Exception as e:
         return st.error(f'Erro nos Filtros dos Cards: {e}')
 
 
-def botao_downloas(base):
+def botao_download(base):
     ''' Função que vai baixar os aquivo'''
     try:
         relatorio = base.copy()
@@ -76,8 +78,6 @@ def botao_downloas(base):
 def main():
     ''' Função principal do programa '''
 
-    # Configuração Geral
-    st.set_page_config(page_title='Curva ABC', layout='wide', initial_sidebar_state='collapsed')
 
     try:
 
@@ -91,11 +91,11 @@ def main():
             st.subheader(arquivo_upload.name)
 
             # --- Abas --- 
-            curva_abc, curva_a, curva_b, curva_c = st.tabs(['Curva ABC','Curva A','Curva B','Curva C'])
+            curva_abc, curva_a, curva_b, curva_c, grafico_comparacao, grafico_categoria = st.tabs(['Curva ABC','Curva A','Curva B','Curva C', 'Graficos de Comparação', 'Grafico de Categoria'])
 
             # Cada Aba é um Filtro que mostra apenas o DataFrame de cada filtro
             with curva_abc:
-                botao_downloas(df_padronizado)
+                botao_download(df_padronizado)
                 kpis_filtrados(df_padronizado)
                 st.dataframe(df_padronizado)
             with curva_a:
@@ -113,6 +113,11 @@ def main():
                 df_curva = Filtrando_curva(df_padronizado,tipo_curva)
                 kpis_filtrados(df_curva)
                 st.dataframe(df_curva,hide_index=True)
+            with grafico_comparacao:
+                st.plotly_chart(pareto(df_padronizado.head(20)), use_container_width=True)
+            with grafico_categoria:
+                st.plotly_chart(analise_categoria(df_padronizado), use_container_width=True)
+
 
         else:
             st.info('Aguardando o arquivo csv')
