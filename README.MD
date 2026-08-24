@@ -31,3 +31,49 @@ O projeto foi construído de forma **modular**, separando o pipeline de tratamen
 ├── .gitignore              # Configuração para ignorar arquivos desnecessários (__pycache__, envs)
 └── README.md               # Documentação técnica do repositório
 
+---
+
+## 🧠 Regras de Negócio e Metodologia Aplicada
+
+### 1. Tratamento de Dados (ETL & Outliers)
+* **Limpeza e Tipagem:** Remoção de duplicatas, padronização de categorias de texto e conversão segura de moedas (`R$ 1.250,50` -> `1250.50`).
+* **Tratamento de Outliers:** Aplicação do método da **Amplitude Interquartil (IQR)** sobre a coluna de preços de venda, substituindo discrepâncias pela mediana dos preços válidos.
+
+### 2. Classificação Curva ABC
+O faturamento total individual é calculado (Preço x Quantidade) e os produtos são ordenados decrescentemente para apuração do percentual acumulado:
+* **Classe A:** Representam até **80%** do faturamento acumulado (Alta prioridade).
+* **Classe B:** Representam os **15%** seguintes (de 80% a 95%) do faturamento acumulado (Média prioridade).
+* **Classe C:** Representam os **5%** finais (de 95% a 100%) do faturamento acumulado (Baixa prioridade/Cauda longa).
+
+### 3. Matriz de Ruptura Crítica por Nível de Serviço
+A cobertura de estoque em dias é calculada via `Estoque Atual / Venda Diária Média`. A flag de **Ruptura Crítica (`1`)** é acionada preventivamente segundo os critérios:
+
+| Classe da Curva ABC | Critério de Cobertura | Status Acionado |
+| :--- | :--- | :--- |
+| **Curva A** | Cobertura < 7 dias | Ruptura Crítica |
+| **Curva B** | Cobertura < 5 dias | Ruptura Crítica |
+| **Curva C** | Cobertura < 3 dias | Ruptura Crítica |
+
+---
+
+## 📊 Funcionalidades do Dashboard (Streamlit)
+
+* **Upload Flexível de Dados:** Leitura automatizada de arquivos `.csv`.
+* **Cards de KPIs em Tempo Real:** Faturamento Total, Volume de Estoque e Total de Produtos em Ruptura Crítica.
+* **Gráfico de Pareto Interativo:** Visualização de duplo eixo Y (Faturamento em R$ vs. % Acumulado).
+* **Análise Comparativa por Categoria:** Barras agrupadas comparando Estoque Atual x Unidades Vendidas em 90 dias.
+* **Exportação Dinâmica:** Módulo de download direto do relatório tratado em formatos **XLSX (Excel)** ou **CSV**.
+
+---
+
+## 🚀 Como Executar o Projeto Localmente
+
+### Pré-requisitos
+* Python 3.10 ou superior instalado.
+
+### Passos
+
+1. **Clone este repositório:**
+   ```bash
+   git clone [https://github.com/0TeT/Analise_Estoque](https://github.com/0TeT/Analise_Estoque)
+   cd Analise_Estoque
