@@ -30,7 +30,7 @@ O projeto foi construído de forma **modular**, separando o pipeline de tratamen
 ├── main.py                 # Aplicação principal em Streamlit (interface do usuário)
 ├── .gitignore              # Configuração para ignorar arquivos desnecessários (__pycache__, envs)
 └── README.md               # Documentação técnica do repositório
-
+```text
 ---
 
 ## 🧠 Regras de Negócio e Metodologia Aplicada
