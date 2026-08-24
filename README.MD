@@ -76,8 +76,8 @@ A cobertura de estoque em dias é calculada dividindo o `Estoque Atual` pela `Ve
 
 1. **Clone este repositório:**
 ```bash
-git clone https://github.com/0TeT/Analise_Estoque
-cd Analise_Estoque
+git clone https://github.com/0TeT/Analise_Estoque_Curva_ABC
+cd Analise_Estoque_Curva_ABC
 ```
 
 2. **Crie e ative um ambiente virtual (opcional, mas recomendado):**
