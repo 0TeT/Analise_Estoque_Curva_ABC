@@ -21,7 +21,7 @@ Transformar dados brutos e não padronizados de vendas/estoque em um painel exec
 
 ## 🏗️ Arquitetura e Estrutura de Pastas
 
-O projeto foi construído de forma **modular**, separando o pipeline de tratamento de dados (ETL), a construção visual dos gráficos e a interface de usuário do dashboard.
+O projeto foi construído de forma **modular**, separando o pipeline de tratamento de dados (ETL), a construção visual dos gráficos e a interface de usuário do dashboard:
 
 ```text
 ├── Ferramentas/
@@ -30,29 +30,30 @@ O projeto foi construído de forma **modular**, separando o pipeline de tratamen
 ├── main.py                 # Aplicação principal em Streamlit (interface do usuário)
 ├── .gitignore              # Configuração para ignorar arquivos desnecessários (__pycache__, envs)
 └── README.md               # Documentação técnica do repositório
-```text
+```
+
 ---
 
 ## 🧠 Regras de Negócio e Metodologia Aplicada
 
 ### 1. Tratamento de Dados (ETL & Outliers)
-* **Limpeza e Tipagem:** Remoção de duplicatas, padronização de categorias de texto e conversão segura de moedas (`R$ 1.250,50` -> `1250.50`).
+* **Limpeza e Tipagem:** Remoção de duplicatas, padronização de categorias de texto e conversão segura de moedas (exemplo: `R$ 1.250,50` para `1250.50`).
 * **Tratamento de Outliers:** Aplicação do método da **Amplitude Interquartil (IQR)** sobre a coluna de preços de venda, substituindo discrepâncias pela mediana dos preços válidos.
 
 ### 2. Classificação Curva ABC
-O faturamento total individual é calculado (Preço x Quantidade) e os produtos são ordenados decrescentemente para apuração do percentual acumulado:
+O faturamento total individual é calculado multiplicando o Preço de Venda pelas Unidades Vendidas. Em seguida, os produtos são ordenados de forma decrescente para apuração do percentual acumulado:
 * **Classe A:** Representam até **80%** do faturamento acumulado (Alta prioridade).
 * **Classe B:** Representam os **15%** seguintes (de 80% a 95%) do faturamento acumulado (Média prioridade).
 * **Classe C:** Representam os **5%** finais (de 95% a 100%) do faturamento acumulado (Baixa prioridade/Cauda longa).
 
 ### 3. Matriz de Ruptura Crítica por Nível de Serviço
-A cobertura de estoque em dias é calculada via `Estoque Atual / Venda Diária Média`. A flag de **Ruptura Crítica (`1`)** é acionada preventivamente segundo os critérios:
+A cobertura de estoque em dias é calculada dividindo o `Estoque Atual` pela `Venda Diária Média`. A flag de **Ruptura Crítica (`1`)** é acionada preventivamente segundo os critérios:
 
 | Classe da Curva ABC | Critério de Cobertura | Status Acionado |
 | :--- | :--- | :--- |
-| **Curva A** | Cobertura < 7 dias | Ruptura Crítica |
-| **Curva B** | Cobertura < 5 dias | Ruptura Crítica |
-| **Curva C** | Cobertura < 3 dias | Ruptura Crítica |
+| **Curva A** | Cobertura menor que 7 dias | Ruptura Crítica |
+| **Curva B** | Cobertura menor que 5 dias | Ruptura Crítica |
+| **Curva C** | Cobertura menor que 3 dias | Ruptura Crítica |
 
 ---
 
@@ -74,6 +75,38 @@ A cobertura de estoque em dias é calculada via `Estoque Atual / Venda Diária M
 ### Passos
 
 1. **Clone este repositório:**
-   ```bash
-   git clone [https://github.com/0TeT/Analise_Estoque](https://github.com/0TeT/Analise_Estoque)
-   cd Analise_Estoque
+```bash
+git clone https://github.com/0TeT/Analise_Estoque
+cd Analise_Estoque
+```
+
+2. **Crie e ative um ambiente virtual (opcional, mas recomendado):**
+```bash
+python -m venv .venv
+
+# Windows:
+.venv\Scripts\activate
+
+# Linux/Mac:
+source .venv/bin/activate
+```
+
+3. **Instale as dependências necessárias:**
+```bash
+pip install pandas numpy streamlit plotly xlsxwriter
+```
+
+4. **Execute a aplicação Streamlit:**
+```bash
+streamlit run main.py
+```
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Linguagem:** Python
+* **Manipulação de Dados:** Pandas, NumPy
+* **Visualização:** Plotly Express, Plotly Graph Objects
+* **Interface & Dashboard:** Streamlit
+* **Motor de Exportação:** XlsxWriter
