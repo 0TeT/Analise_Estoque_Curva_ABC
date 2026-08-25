@@ -26,7 +26,7 @@ def pareto(base):
     )
 
     fig.update_layout(
-        title_text="<b>Gráfico de Pareto:</b> Top produtos x Faturamento Acumulado",
+        title_text="<b>Gráfico de Pareto:</b> Top 20 produtos x Faturamento Acumulado",
         xaxis_title="Código do Produto",
     )
 
